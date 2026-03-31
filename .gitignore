@@ -1,0 +1,31 @@
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# Key files
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+*.jks
+
+# Credentials
+credentials.json
+service-account*.json
+*secret*.json
+*.keystore
+
+# SSH
+id_rsa
+id_ed25519
+*.pub
+
+# Tokens
+.token
+.netrc
+
+# OS
+.DS_Store
+Thumbs.db
