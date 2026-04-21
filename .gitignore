@@ -3,6 +3,9 @@
 .env.*
 !.env.example
 
+.claude/
+docs/
+
 # Key files
 *.pem
 *.key
@@ -26,6 +29,10 @@ id_ed25519
 .token
 .netrc
 
+
+
+
 # OS
 .DS_Store
 Thumbs.db
+.firecrawl/
