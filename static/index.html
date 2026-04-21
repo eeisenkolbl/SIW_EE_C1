@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Residencial Guaraní — Departamentos en Asunción</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+  <header class="header">
+    <nav class="nav container">
+      <a href="#inicio" class="nav__logo">Residencial Guaraní</a>
+      <button class="nav__toggle" id="nav-toggle" aria-label="Menú">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <ul class="nav__menu" id="nav-menu">
+        <li><a href="#inicio" class="nav__link">Inicio</a></li>
+        <li><a href="#servicios" class="nav__link">Servicios</a></li>
+        <li><a href="#departamentos" class="nav__link">Departamentos</a></li>
+        <li><a href="#nosotros" class="nav__link">Nosotros</a></li>
+        <li><a href="#contacto" class="nav__link">Contacto</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+
+    <section id="inicio" class="hero">
+      <div class="hero__content container">
+        <h1 class="hero__title">Tu hogar ideal en Asunción</h1>
+        <p class="hero__subtitle">Departamentos modernos con servicios completos para que vivas con tranquilidad y comodidad.</p>
+        <a href="#contacto" class="btn btn--accent">Consultar Disponibilidad</a>
+      </div>
+    </section>
+
+    <section id="servicios" class="section section--alt">
+      <div class="container">
+        <h2 class="section__title">Nuestros Servicios</h2>
+        <p class="section__subtitle">Todo lo que necesitás para vivir cómodo y seguro.</p>
+        <div class="cards" id="servicios-grid">
+          <!-- Cargado desde /api/servicios -->
+        </div>
+      </div>
+    </section>
+
+    <section id="departamentos" class="section">
+      <div class="container">
+        <h2 class="section__title">Departamentos Disponibles</h2>
+        <p class="section__subtitle">Encontrá el espacio perfecto para vos.</p>
+        <div class="cards" id="departamentos-grid">
+          <!-- Cargado desde /api/departamentos -->
+        </div>
+      </div>
+    </section>
+
+    <section id="nosotros" class="section section--alt">
+      <div class="container">
+        <h2 class="section__title">Sobre Nosotros</h2>
+        <div class="about">
+          <div class="about__text">
+            <p>Con más de <strong>10 años de experiencia</strong> en el mercado inmobiliario de Asunción, Residencial Guaraní se dedica a ofrecer departamentos de calidad con servicios integrales para nuestros inquilinos.</p>
+            <p>Nuestro compromiso es brindar un hogar seguro, cómodo y bien mantenido. Contamos con un equipo de administración profesional que se encarga de que todo funcione perfectamente.</p>
+            <p>Ubicados en una zona privilegiada de Asunción, nuestros residentes disfrutan de fácil acceso a transporte, comercios, centros educativos y áreas verdes.</p>
+          </div>
+          <div class="about__image">
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Asunci%C3%B3n_downtown.jpg/800px-Asunci%C3%B3n_downtown.jpg"
+              alt="Centro de Asunción, Paraguay"
+              loading="lazy"
+            >
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contacto" class="section">
+      <div class="container">
+        <h2 class="section__title">Contacto</h2>
+        <div class="contact">
+          <div class="contact__info">
+            <div class="contact__item">
+              <strong>Dirección</strong>
+              <p>Av. Mariscal López 1234, Asunción, Paraguay</p>
+            </div>
+            <div class="contact__item">
+              <strong>Teléfono</strong>
+              <p>(021) 555-1234</p>
+            </div>
+            <div class="contact__item">
+              <strong>WhatsApp</strong>
+              <p>+595 981 123456</p>
+            </div>
+            <div class="contact__item">
+              <strong>Email</strong>
+              <p>info@residencialguarani.com.py</p>
+            </div>
+            <div class="contact__item">
+              <strong>Horario</strong>
+              <p>Lunes a Viernes: 08:00 - 17:00<br>Sábados: 08:00 - 12:00</p>
+            </div>
+          </div>
+          <form class="contact__form" id="contact-form">
+            <div class="form__group">
+              <label for="nombre">Nombre</label>
+              <input type="text" id="nombre" name="nombre" required>
+            </div>
+            <div class="form__group">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form__group">
+              <label for="mensaje">Mensaje</label>
+              <textarea id="mensaje" name="mensaje" rows="4" required></textarea>
+            </div>
+            <button type="submit" class="btn btn--accent">Enviar Mensaje</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2026 Residencial Guaraní. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <!-- Chatbot -->
+  <button class="chatbot__toggle" id="chatbot-toggle" aria-label="Abrir chat">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+    </svg>
+  </button>
+
+  <div class="chatbot" id="chatbot-window" hidden>
+    <div class="chatbot__header">
+      <span>Asistente Virtual</span>
+      <button class="chatbot__close" id="chatbot-close" aria-label="Cerrar chat">&times;</button>
+    </div>
+    <div class="chatbot__messages" id="chatbot-messages"></div>
+    <form class="chatbot__form" id="chatbot-form">
+      <input type="text" id="chatbot-input" placeholder="Escribí tu consulta..." autocomplete="off">
+      <button type="submit">Enviar</button>
+    </form>
+  </div>
+
+  <script src="/js/main.js"></script>
+  <script src="/js/chatbot.js"></script>
+</body>
+</html>

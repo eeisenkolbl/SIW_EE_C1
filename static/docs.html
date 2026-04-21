@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Documentación — Residencial Guaraní API</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary:    #5c4033;
+      --secondary:  #8b6f56;
+      --accent:     #c67d4a;
+      --bg:         #f5efe7;
+      --bg-alt:     #faf6f0;
+      --card:       #ffffff;
+      --text:       #3d2e22;
+      --text-light: #6b5a4e;
+      --radius:     12px;
+      --shadow:     0 2px 8px rgba(92,64,51,.1);
+      --font:       -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    body { font-family: var(--font); background: var(--bg); color: var(--text); line-height: 1.6; }
+
+    header {
+      background: var(--primary);
+      color: #fff;
+      padding: 1.25rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    header a { color: #fff; text-decoration: none; opacity: .75; font-size: .9rem; }
+    header a:hover { opacity: 1; }
+    header h1 { font-size: 1.25rem; font-weight: 700; }
+
+    .container { max-width: 860px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+    h2 { color: var(--primary); font-size: 1.35rem; margin: 2.5rem 0 .75rem; border-left: 4px solid var(--accent); padding-left: .75rem; }
+    h3 { color: var(--secondary); font-size: 1rem; margin: 1.5rem 0 .5rem; }
+    p  { color: var(--text-light); margin-bottom: .75rem; }
+
+    /* Endpoint cards */
+    .endpoint {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .endpoint-header { display: flex; align-items: center; gap: .75rem; margin-bottom: .5rem; }
+    .badge {
+      font-size: .75rem;
+      font-weight: 700;
+      padding: .2rem .55rem;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+    .badge-get  { background: #d4edda; color: #155724; }
+    .badge-post { background: #cce5ff; color: #004085; }
+    .endpoint-path { font-family: monospace; font-size: .95rem; color: var(--primary); }
+    .endpoint-desc { color: var(--text-light); font-size: .9rem; }
+
+    /* Code blocks */
+    pre {
+      background: #2d1f17;
+      color: #f5efe7;
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      overflow-x: auto;
+      font-size: .85rem;
+      margin: .75rem 0 1rem;
+    }
+    code { font-family: 'Courier New', monospace; }
+
+    /* Decision tree */
+    .tree { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; margin-bottom: 1rem; }
+    .tree-row { display: grid; grid-template-columns: 3fr 1fr 4fr; gap: 0; border-bottom: 1px solid var(--bg); }
+    .tree-row:last-child { border-bottom: none; }
+    .tree-row.tree-head { background: var(--primary); color: #fff; font-weight: 600; font-size: .85rem; }
+    .tree-cell { padding: .65rem 1rem; font-size: .85rem; color: var(--text-light); }
+    .tree-head .tree-cell { color: #fff; }
+    .tree-cell:nth-child(2) { text-align: center; font-weight: 700; color: var(--accent); border-left: 1px solid var(--bg); border-right: 1px solid var(--bg); }
+    .tree-head .tree-cell:nth-child(2) { color: #fff; border-color: rgba(255,255,255,.2); }
+    .keyword { display: inline-block; background: var(--bg); border-radius: 4px; padding: .1rem .4rem; margin: .1rem; font-family: monospace; font-size: .8rem; color: var(--primary); }
+
+    /* Flow diagram */
+    .flow { display: flex; align-items: center; flex-wrap: wrap; gap: .5rem; margin: 1rem 0; }
+    .flow-step { background: var(--card); border: 2px solid var(--secondary); border-radius: 8px; padding: .5rem 1rem; font-size: .85rem; color: var(--primary); font-weight: 600; }
+    .flow-arrow { color: var(--accent); font-size: 1.2rem; }
+
+    .tip { background: #fff8f0; border-left: 4px solid var(--accent); border-radius: 0 var(--radius) var(--radius) 0; padding: .75rem 1rem; margin: 1rem 0; font-size: .9rem; color: var(--text-light); }
+  </style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div style="font-size:.8rem;opacity:.7;margin-bottom:.15rem"><a href="/">← Volver al inicio</a></div>
+    <h1>Documentación — Residencial Guaraní API</h1>
+  </div>
+</header>
+
+<div class="container">
+
+  <h2>Descripción general</h2>
+  <p>Esta API REST sirve la landing page de Residencial Guaraní e implementa un chatbot de FAQs basado en un <strong>árbol de decisión por palabras clave</strong>. También expone los datos de departamentos, servicios y respuestas del chatbot.</p>
+
+  <div class="flow">
+    <div class="flow-step">Usuario escribe mensaje</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">Normalizar texto</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">¿Es saludo?</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">Árbol de decisión</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">RespuestaID</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">Texto de respuesta</div>
+  </div>
+
+  <h2>Endpoints</h2>
+
+  <div class="endpoint">
+    <div class="endpoint-header">
+      <span class="badge badge-post">POST</span>
+      <span class="endpoint-path">/api/chat</span>
+    </div>
+    <p class="endpoint-desc">Envía un mensaje al chatbot. Retorna la respuesta más relevante del árbol de decisión.</p>
+    <h3>Request</h3>
+    <pre><code>POST /api/chat
+Content-Type: application/json
+
+{ "message": "cuánto cuesta un departamento?" }</code></pre>
+    <h3>Response</h3>
+    <pre><code>{ "id": 4, "response": "Nuestros departamentos van desde Gs. 2.500.000/mes..." }</code></pre>
+  </div>
+
+  <div class="endpoint">
+    <div class="endpoint-header">
+      <span class="badge badge-get">GET</span>
+      <span class="endpoint-path">/api/respuestas</span>
+    </div>
+    <p class="endpoint-desc">Lista todas las respuestas del árbol de decisión.</p>
+    <pre><code>GET /api/respuestas
+
+[
+  { "id": 2, "categoria": "horarios", "texto": "Nuestro horario de atención..." },
+  { "id": 3, "categoria": "ubicacion", "texto": "Estamos ubicados en..." },
+  ...
+]</code></pre>
+  </div>
+
+  <div class="endpoint">
+    <div class="endpoint-header">
+      <span class="badge badge-get">GET</span>
+      <span class="endpoint-path">/api/respuestas/{id}</span>
+    </div>
+    <p class="endpoint-desc">Obtiene una respuesta específica por su ID.</p>
+    <pre><code>GET /api/respuestas/4
+
+{ "id": 4, "categoria": "precios", "texto": "Nuestros departamentos van desde Gs. 2.500.000/mes..." }</code></pre>
+  </div>
+
+  <div class="endpoint">
+    <div class="endpoint-header">
+      <span class="badge badge-get">GET</span>
+      <span class="endpoint-path">/api/departamentos</span>
+    </div>
+    <p class="endpoint-desc">Lista todos los departamentos disponibles con precio, superficie y características.</p>
+  </div>
+
+  <div class="endpoint">
+    <div class="endpoint-header">
+      <span class="badge badge-get">GET</span>
+      <span class="endpoint-path">/api/servicios</span>
+    </div>
+    <p class="endpoint-desc">Lista los servicios del residencial (mantenimiento, seguridad, áreas comunes, etc.).</p>
+  </div>
+
+  <h2>Árbol de decisión</h2>
+  <p>El chatbot normaliza el texto del usuario (minúsculas, sin acentos) y busca coincidencias en la siguiente tabla. El ID resultante se usa para obtener el texto de respuesta en <code>RespuestaMap</code>.</p>
+
+  <div class="tree">
+    <div class="tree-row tree-head">
+      <div class="tree-cell">Palabras clave</div>
+      <div class="tree-cell">ID</div>
+      <div class="tree-cell">Categoría</div>
+    </div>
+    <div class="tree-row">
+      <div class="tree-cell"><span class="keyword">horario</span><span class="keyword">hora</span><span class="keyword">atencion</span><span class="keyword">abierto</span><span class="keyword">abre</span><span class="keyword">cierra</span></div>
+      <div class="tree-cell">2</div>
+      <div class="tree-cell">Horarios de atención</div>
+    </div>
+    <div class="tree-row">
+      <div class="tree-cell"><span class="keyword">ubicacion</span><span class="keyword">direccion</span><span class="keyword">donde</span><span class="keyword">llegar</span><span class="keyword">mapa</span></div>
+      <div class="tree-cell">3</div>
+      <div class="tree-cell">Ubicación</div>
+    </div>
+    <div class="tree-row">
+      <div class="tree-cell"><span class="keyword">precio</span><span class="keyword">alquiler</span><span class="keyword">costo</span><span class="keyword">cuanto</span><span class="keyword">mensualidad</span><span class="keyword">renta</span></div>
+      <div class="tree-cell">4</div>
+      <div class="tree-cell">Precios</div>
+    </div>
+    <div class="tree-row">
+      <div class="tree-cell"><span class="keyword">pago</span><span class="keyword">pagar</span><span class="keyword">transferencia</span><span class="keyword">efectivo</span><span class="keyword">tarjeta</span></div>
+      <div class="tree-cell">5</div>
+      <div class="tree-cell">Métodos de pago</div>
+    </div>
+    <div class="tree-row">
+      <div class="tree-cell"><span class="keyword">mantenimiento</span><span class="keyword">reparacion</span><span class="keyword">roto</span><span class="keyword">fuga</span><span class="keyword">luz</span></div>
+      <div class="tree-cell">6</div>
+      <div class="tree-cell">Mantenimiento</div>
+    </div>
+    <div class="tree-row">
+      <div class="tree-cell"><span class="keyword">requisito</span><span class="keyword">documento</span><span class="keyword">contrato</span><span class="keyword">garantia</span></div>
+      <div class="tree-cell">7</div>
+      <div class="tree-cell">Requisitos para alquilar</div>
+    </div>
+    <div class="tree-row">
+      <div class="tree-cell"><span class="keyword">piscina</span><span class="keyword">gimnasio</span><span class="keyword">salon</span><span class="keyword">area</span><span class="keyword">comun</span></div>
+      <div class="tree-cell">8</div>
+      <div class="tree-cell">Áreas comunes</div>
+    </div>
+    <div class="tree-row">
+      <div class="tree-cell"><span class="keyword">contacto</span><span class="keyword">telefono</span><span class="keyword">email</span><span class="keyword">whatsapp</span></div>
+      <div class="tree-cell">9</div>
+      <div class="tree-cell">Contacto</div>
+    </div>
+    <div class="tree-row">
+      <div class="tree-cell"><span class="keyword">mascota</span><span class="keyword">perro</span><span class="keyword">gato</span><span class="keyword">animal</span></div>
+      <div class="tree-cell">10</div>
+      <div class="tree-cell">Mascotas</div>
+    </div>
+    <div class="tree-row">
+      <div class="tree-cell"><span class="keyword">incluido</span><span class="keyword">agua</span><span class="keyword">internet</span><span class="keyword">expensa</span><span class="keyword">gasto</span></div>
+      <div class="tree-cell">11</div>
+      <div class="tree-cell">Servicios incluidos</div>
+    </div>
+    <div class="tree-row">
+      <div class="tree-cell"><span class="keyword">urgencia</span><span class="keyword">urgencias</span></div>
+      <div class="tree-cell">99</div>
+      <div class="tree-cell">Easter egg 🥚</div>
+    </div>
+  </div>
+
+  <div class="tip">
+    IDs especiales: <strong>0</strong> = respuesta de fallback (sin coincidencia) · <strong>1</strong> = saludo · <strong>99</strong> = easter egg
+  </div>
+
+  <h2>Cómo agregar una nueva respuesta</h2>
+  <p>1. Agregar el texto en <code>handlers/respuestas.go</code>, dentro de <code>RespuestaMap</code>:</p>
+  <pre><code>12: {ID: 12, Categoria: "parking", Texto: "El estacionamiento cuesta Gs. 300.000/mes adicional."},</code></pre>
+  <p>2. Agregar las palabras clave en <code>handlers/chat.go</code>, dentro de <code>decisionTree</code>:</p>
+  <pre><code>{Keywords: []string{"parking", "auto", "cochera"}, RespuestaID: 12},</code></pre>
+
+  <h2>Swagger UI</h2>
+  <p>Documentación interactiva disponible en <a href="/swagger/" style="color:var(--accent)">/swagger/</a> — permite probar todos los endpoints directamente desde el navegador.</p>
+
+  <h2>Estructura del proyecto</h2>
+  <p>El proyecto está organizado en capas: el punto de entrada (<code>main.go</code>), los handlers HTTP, los modelos de datos y el frontend estático.</p>
+
+  <pre><code>SIW_EE_C1/
+├── main.go                  ← Punto de entrada. Define el router y arranca el servidor.
+├── go.mod / go.sum          ← Dependencias Go (chi, cors, swaggo)
+│
+├── models/
+│   └── models.go            ← Structs compartidos: Departamento, Servicio, Respuesta, FAQ, ChatRequest, ChatResponse
+│
+├── handlers/
+│   ├── chat.go              ← POST /api/chat — árbol de decisión por palabras clave
+│   ├── respuestas.go        ← GET /api/respuestas y /api/respuestas/{id} — banco de respuestas del chatbot
+│   ├── departamentos.go     ← GET /api/departamentos — lista de departamentos
+│   └── servicios.go         ← GET /api/servicios — lista de servicios
+│
+├── docs/                    ← Generado automáticamente por `swag init`. No editar a mano.
+│   ├── docs.go
+│   ├── swagger.json
+│   └── swagger.yaml
+│
+└── static/
+    ├── index.html           ← Landing page principal
+    ├── docs.html            ← Esta página
+    ├── css/
+    │   └── styles.css       ← Estilos (paleta tierra suave, responsive)
+    └── js/
+        ├── main.js          ← Fetch de /api/servicios y /api/departamentos, render de cards
+        └── chatbot.js       ← Widget de chat, POST a /api/chat</code></pre>
+
+  <h2>Cómo funciona el backend</h2>
+
+  <h3>main.go — Router y servidor</h3>
+  <p>Usa el router <strong>chi</strong>. Registra middlewares (logger, recoverer, CORS), monta todos los endpoints de la API, sirve la Swagger UI y finalmente sirve los archivos estáticos de <code>static/</code> como fallback con <code>http.FileServer</code>. El servidor escucha en el puerto <strong>8080</strong>.</p>
+  <pre><code>r.Post("/api/chat",            handlers.PostChat)
+r.Get("/api/departamentos",    handlers.GetDepartamentos)
+r.Get("/api/servicios",        handlers.GetServicios)
+r.Get("/api/respuestas",       handlers.GetRespuestas)
+r.Get("/api/respuestas/{id}",  handlers.GetRespuestaByID)
+r.Get("/swagger/*",            httpSwagger.Handler(...))
+r.Get("/docs",                 → static/docs.html)
+r.Handle("/*",                 http.FileServer("static/"))</code></pre>
+
+  <h3>models/models.go — Structs</h3>
+  <p>Define todos los tipos de datos que circulan entre handlers y JSON:</p>
+  <pre><code>Departamento   → datos de cada departamento (precio en PYG, superficie, características)
+Servicio       → servicios del residencial (icono, nombre, descripción)
+Respuesta      → una entrada del banco de respuestas del chatbot (id, categoria, texto)
+FAQ            → nodo del árbol de decisión (keywords []string, RespuestaID int)
+ChatRequest    → body del POST /api/chat { "message": "..." }
+ChatResponse   → respuesta del chatbot { "id": 4, "response": "..." }</code></pre>
+
+  <h3>handlers/respuestas.go — Banco de respuestas</h3>
+  <p><code>RespuestaMap</code> es un <code>map[int]Respuesta</code> que centraliza todos los textos del chatbot. Los handlers <code>GetRespuestas</code> y <code>GetRespuestaByID</code> lo exponen vía API. El handler de chat también lo usa para resolver un ID a texto.</p>
+  <pre><code>var RespuestaMap = map[int]models.Respuesta{
+    0:  { fallback },
+    1:  { saludo },
+    2:  { horarios },
+    ...
+    99: { easter egg },
+}</code></pre>
+
+  <h3>handlers/chat.go — Árbol de decisión</h3>
+  <p><code>decisionTree</code> es un slice de <code>FAQ</code>. Cada entrada tiene un conjunto de palabras clave y el ID de la respuesta que debe devolverse si hay coincidencia. El algoritmo:</p>
+  <pre><code>1. Normalizar el mensaje: minúsculas + quitar acentos (golang.org/x/text)
+2. Si contiene un saludo → responder con ID 1
+3. Recorrer decisionTree, contar cuántas keywords coinciden con las palabras del mensaje
+4. Elegir la entrada con mayor puntaje → usar su RespuestaID
+5. Buscar RespuestaMap[id] y devolver { id, response }</code></pre>
+
+  <h3>handlers/departamentos.go y servicios.go</h3>
+  <p>Datos hardcodeados en slices de structs. Cada handler simplemente serializa el slice a JSON con <code>json.NewEncoder(w).Encode(...)</code>. En una versión futura estos datos podrían venir de una base de datos.</p>
+
+  <h3>Frontend — static/js/main.js</h3>
+  <p>Al cargar la página hace dos llamadas <code>fetch()</code> en paralelo a <code>/api/servicios</code> y <code>/api/departamentos</code>, luego crea los elementos HTML de las cards dinámicamente con <code>document.createElement</code>.</p>
+
+  <h3>Frontend — static/js/chatbot.js</h3>
+  <p>El widget de chat escucha el submit del formulario, hace un <code>POST /api/chat</code> con el mensaje del usuario, y agrega la respuesta recibida al historial de mensajes. Maneja el toggle del panel y muestra un mensaje de bienvenida al cargar.</p>
+
+</div>
+</body>
+</html>
