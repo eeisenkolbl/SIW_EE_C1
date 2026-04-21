@@ -1,3 +1,7 @@
+.claude/
+.firecrawl/
+docs/
+
 # Environment and secrets
 .env
 .env.*
